@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element>
+            <name>optimusLicenseKey</name>
+            <label lang="de">Lizenzschlüssel</label>
+            <label>license key</label>
+        </element>
+    </elements>
+</config>

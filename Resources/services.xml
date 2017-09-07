@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="optimus_optimizer.service_factory"
+                 class="TinectOptimusOptimizer\Components\OptimusServiceFactory"/>
+        <service id="optimus_optimizer.service" class="TinectOptimusOptimizer\Components\OptimusService">
+            <factory service="optimus_optimizer.service_factory" method="factory"/>
+            <argument type="service" id="shopware.plugin.cached_config_reader"/>
+        </service>
+
+        <service id="optimus_optimizer.image_optimizer" class="TinectOptimusOptimizer\Components\OptimusOptimizer">
+            <tag name="shopware_media.optimizer" priority="500"/>
+            <argument type="service" id="optimus_optimizer.service"/>
+            <argument type="string">%kernel.root_dir%/</argument>
+        </service>
+    </services>
+</container>
