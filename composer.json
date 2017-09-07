@@ -1,0 +1,13 @@
+{
+  "name": "tinect/optimus-optimizer",
+  "keywords": ["shopware", "backend", "thumbnails", "media manager"],
+  "description": "optimizing thumbnails with optimus.io",
+  "license": "MIT",
+  "type": "shopware-plugin",
+  "extra": {
+    "installer-name": "TinectOptimusOptimizer"
+  },
+  "require": {
+    "composer/installers": "~1.0"
+  }
+}
