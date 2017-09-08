@@ -44,7 +44,28 @@ class OptimusOptimizer implements OptimizerInterface
      */
     public function run($filepath)
     {
-        $this->optimusService->optimize($this->rootDir . $filepath);
+        $extension = strtolower($this->getImageExtension($filepath));
+
+        switch ($extension) {
+            case 'webp':
+                $jpgPath = $this->rootDir . str_replace('.webp', '.jpg', $filepath);
+                $pngPath = $this->rootDir . str_replace('.webp', '.png', $filepath);
+
+                if (@file_exists($jpgPath)) {
+                    $this->optimusService->optimize($jpgPath,
+                        'webp',
+                        $this->rootDir . $filepath);
+                } elseif (@file_exists($pngPath)) {
+                    $this->optimusService->optimize($pngPath,
+                        'webp',
+                        $this->rootDir . $filepath);
+                }
+                break;
+            default:
+                $this->optimusService->optimize($this->rootDir . $filepath);
+                break;
+        }
+
     }
 
     /**
@@ -52,7 +73,7 @@ class OptimusOptimizer implements OptimizerInterface
      */
     public function getSupportedMimeTypes()
     {
-        return ['image/jpeg', 'image/png', 'image/jpg'];
+        return ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
     }
 
     /**
@@ -62,4 +83,20 @@ class OptimusOptimizer implements OptimizerInterface
     {
         return true;
     }
+
+
+    /**
+     * Returns the extension of the file with passed path
+     *
+     * @param string
+     *
+     * @return string
+     */
+    private function getImageExtension($path)
+    {
+        $pathInfo = pathinfo($path);
+        return $pathInfo['extension'];
+    }
+
+
 }

@@ -1,6 +1,10 @@
 # TinectOptimusOptimizer
 optimizing thumbnails with optimus.io
 
+Converts JPG- and PNG-Images for best score in google-insights.
+Supports webp-optimization, if jpg or png exists.
+
+
 ## Zip-Installation
 
 * Download the [latest plugin version](https://github.com/tinect/TinectOptimusOptimizer/releases/latest/)
@@ -9,6 +13,5 @@ optimizing thumbnails with optimus.io
 
 ## future features:
 * add license-key check
-* add webp-support
 * option to optimize original image, too
 * ...

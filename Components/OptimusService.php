@@ -6,7 +6,8 @@ namespace TinectOptimusOptimizer\Components;
  * Class OptimusService
  * @package TinectOptimusOptimizer\Components
  */
-class OptimusService {
+class OptimusService
+{
     /**
      * @var string
      */
@@ -32,14 +33,16 @@ class OptimusService {
     /**
      * @param string $apiKey
      */
-    public function __construct($apiKey) {
+    public function __construct($apiKey)
+    {
         $this->apiKey = $apiKey;
     }
 
     /**
      * @return string
      */
-    public function getApiKey() {
+    public function getApiKey()
+    {
         return $this->apiKey;
     }
 
@@ -47,25 +50,32 @@ class OptimusService {
      * @param string $apiKey
      * @return $this
      */
-    public function setApiKey($apiKey) {
-        $this->apiKey = (string) $apiKey;
+    public function setApiKey($apiKey)
+    {
+        $this->apiKey = (string)$apiKey;
         return $this;
     }
 
     /**
      * @param string $image
      * @param string $option
+     * @param string $target
      * @return void
-     * @throws \Exception
+     * @throws OptimusApiException
      */
-    public function optimize($image, $option = self::OPTION_OPTIMIZE) {
+    public function optimize($image, $option = self::OPTION_OPTIMIZE, $target = '')
+    {
 
-        $endpoint = $this->endpoint.'/'.$this->apiKey.'?'.$option;
+        $endpoint = $this->endpoint . '/' . $this->apiKey . '?' . $option;
 
         $headers = array(
             'User-Agent: Optimus-API',
             'Accept: image/*'
         );
+
+        if ($target === '') {
+            $target = $image;
+        }
 
         $ch = curl_init();
         curl_setopt_array($ch, array(
@@ -80,7 +90,7 @@ class OptimusService {
 
         $response = curl_exec($ch);
         $curlError = curl_error($ch);
-        $httpcode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $body = substr($response, $header_size);
 
@@ -89,6 +99,6 @@ class OptimusService {
             throw new OptimusApiException($body);
         }
 
-        file_put_contents($image, $body);
+        file_put_contents($target, $body);
     }
 }
