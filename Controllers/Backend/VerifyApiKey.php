@@ -15,12 +15,18 @@ class Shopware_Controllers_Backend_VerifyApiKey extends \Enlight_Controller_Acti
 
         $this->container->get('front')->Plugins()->ViewRenderer()->setNoRender();
         $config = Shopware()->Container()->get('shopware.plugin.config_reader')->getByPluginName('TinectOptimusOptimizer');
-
-        $optimus = new OptimusService($config['optimusLicenseKey']);
-        if ($optimus->verifyApiKey()) {
-            echo $config['optimusLicenseKey']. " is valid";
-            exit();
+        
+        if (!$config['optimusLicenseKey']) {
+            echo "Key is missing! Saved?";
+        } else {
+            $optimus = new OptimusService($config['optimusLicenseKey']);
+            if ($optimus->verifyApiKey()) {
+                echo $config['optimusLicenseKey'] . " is valid";
+            } else {
+                echo $config['optimusLicenseKey'] . " is NOT valid";
+            }
         }
+        exit();
     }
 
 
