@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
     <elements>
         <element>
             <name>optimusLicenseKey</name>
@@ -7,11 +8,41 @@
             <label>license key</label>
         </element>
 
+
+        <element type="button">
+            <name>checkLicense</name>
+            <label lang="de">Lizenz prüfen</label>
+            <label lang="en">Check licence</label>
+            <options>
+                <handler>
+                    <![CDATA[
+    function (button) {
+        if (window.XMLHttpRequest) {
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                alert(xmlhttp.responseText);
+            }
+        }
+        xmlhttp.open("GET", "verifyApiKey", false);
+        xmlhttp.send();
+    }
+
+                    ]]>
+                </handler>
+            </options>
+        </element>
+
+
         <element type="boolean">
             <name>optimizeOriginal</name>
             <label lang="de">Optimiere auch Originalbilder</label>
             <label>optimize original images, too</label>
             <value>true</value>
         </element>
+
     </elements>
 </config>

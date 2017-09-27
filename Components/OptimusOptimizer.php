@@ -171,6 +171,8 @@ class OptimusOptimizer implements OptimizerInterface
     public function isRunnable()
     {
         return true;
+        //TODO: Implement and Cache result!
+        return $this->optimusService->verifyApiKey();
     }
 
 

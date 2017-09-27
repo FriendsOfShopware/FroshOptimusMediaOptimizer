@@ -56,6 +56,37 @@ class OptimusService
         return $this;
     }
 
+
+    /**
+     * @return bool
+     */
+    public function verifyApiKey()
+    {
+
+        $ch = curl_init();
+        // Set some options - we are passing in a useragent too here
+        curl_setopt_array($ch, array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://verify.optimus.io/'.$this->apiKey,
+            CURLOPT_USERAGENT => 'WordPress/4;http://www.google.de'
+        ));
+        $response = curl_exec($ch);
+        $curlError = curl_error($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        // error catching
+        if (!empty($curlError) || empty($response) || $httpcode != 200) {
+            return false;
+        }
+
+        if(strtotime('+1 years',$response) > time())  {
+            return true;
+        }
+
+        return false;
+    }
+
+
     /**
      * @param string $image
      * @param string $option
