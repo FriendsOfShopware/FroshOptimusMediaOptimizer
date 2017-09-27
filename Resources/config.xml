@@ -6,5 +6,12 @@
             <label lang="de">Lizenzschlüssel</label>
             <label>license key</label>
         </element>
+
+        <element type="boolean">
+            <name>optimizeOriginal</name>
+            <label lang="de">Optimiere auch Originalbilder</label>
+            <label>optimize original images, too</label>
+            <value>true</value>
+        </element>
     </elements>
 </config>

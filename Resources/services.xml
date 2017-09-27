@@ -13,6 +13,7 @@
             <tag name="shopware_media.optimizer" priority="500"/>
             <argument type="service" id="optimus_optimizer.service"/>
             <argument type="string">%kernel.root_dir%/</argument>
+            <argument type="service" id="shopware.plugin.cached_config_reader"/>
         </service>
     </services>
 </container>

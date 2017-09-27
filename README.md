@@ -13,7 +13,6 @@ Works great with [ShyimWebP](https://github.com/shyim/shyimwebp)
 
 ## future features:
 * add license-key check
-* option to optimize original image, too
 * ...
 
 ## [Buy me a coffee](https://www.paypal.me/tinect/)

@@ -3,6 +3,7 @@
 namespace TinectOptimusOptimizer\Components;
 
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
+use Shopware\Components\Plugin\CachedConfigReader;
 
 /**
  * Class OptimusOptimizer
@@ -21,14 +22,21 @@ class OptimusOptimizer implements OptimizerInterface
     private $rootDir;
 
     /**
+     * @var CachedConfigReader
+     */
+    private $cachedConfigReader;
+
+    /**
      * OptimusOptimizer constructor.
      * @param OptimusService $optimusService
      * @param $rootDir
+     * @param CachedConfigReader $cachedConfigReader
      */
-    public function __construct(OptimusService $optimusService, $rootDir)
+    public function __construct(OptimusService $optimusService, $rootDir, CachedConfigReader $cachedConfigReader)
     {
         $this->optimusService = $optimusService;
         $this->rootDir = $rootDir;
+        $this->cachedConfigReader = $cachedConfigReader;
     }
 
     /**
@@ -81,7 +89,7 @@ class OptimusOptimizer implements OptimizerInterface
                             'webp',
                             $filepath);
                     }
-                    
+
                 }
 
                 break;
@@ -89,6 +97,63 @@ class OptimusOptimizer implements OptimizerInterface
                 $this->optimusService->optimize($filepath);
                 break;
         }
+
+        $config = $this->cachedConfigReader->getByPluginName('TinectOptimusOptimizer');
+        if ($config['optimizeOriginal']) {
+            $this->optimizeOriginalFiles();
+        }
+
+    }
+
+
+    private function optimizeOriginalFiles()
+    {
+
+        //TODO: optimize code!
+        ignore_user_abort(true);
+        ini_set('max_execution_time', -1);
+        ini_set('memory_limit', -1);
+        set_time_limit(0);
+
+        $sql = "SELECT * FROM s_media where albumID<>-13 AND type='IMAGE' and path not like('%thumb_export%') and extension in('jpg','png') and userID<>-1 ORDER by id DESC /* LIMIT 0,20*/";
+
+        $mediaResource = \Shopware\Components\Api\Manager::getResource('media');
+
+        foreach (Shopware()->Db()->fetchAll($sql) as $media) {
+
+            $mediainfo = $mediaResource->getOne($media["id"]);
+            $path = explode("/media", $mediainfo["path"]);
+            $filepath = $this->rootDir . "/media" . $path[1];
+            $origFilesize = @filesize($filepath);
+            $masse = @getimagesize($filepath);
+            $breite = $masse[0];
+            $hoehe = $masse[1];
+
+            if ($origFilesize > 0) {
+
+                /*
+                 * TODO: move this to optimusService
+                 * + make images smaller automatically
+                */
+                if (($origFilesize / 1024) < 5000 && $breite < 10000 && $hoehe < 10000 && $breite > 0 && $hoehe > 0) {
+
+
+                    try {
+                        $this->optimusService->optimize($filepath);
+                        $filesize = @filesize($filepath);
+                        Shopware()->Db()->query("UPDATE s_media SET file_size=" . $filesize . ",userID=-1 WHERE id=" . $media["id"]);
+
+                    } catch (\Exception $e) {
+                    }
+
+                }
+
+            }
+
+
+        }
+
+        return true;
 
     }
 
