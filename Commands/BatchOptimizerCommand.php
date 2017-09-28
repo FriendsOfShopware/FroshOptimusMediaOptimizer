@@ -92,7 +92,7 @@ class BatchOptimizerCommand extends ShopwareCommand
                     continue;
                 }
 
-                if (!in_array($this->getMimeTypeByFile($item['path']), OptimusOptimizer::$supportedMimeTypes)) {
+                if (!in_array($this->getMimeTypeByFile($item['path']), OptimusOptimizer::$supportedMimeTypes) && $this->getMimeTypeByFile($item['path']) != 'image/webp') {
                     $progressBar->advance();
                     continue;
                 }
