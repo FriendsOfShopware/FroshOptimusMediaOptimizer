@@ -18,6 +18,9 @@
         Converts JPG- and PNG-Images for best score in google-insights.<br />
         Supports webp-optimization, if jpg or png exists.<br /><br />
 
+        We recommend running the CLI-Command after installation to optimize all images in media:<br/>
+        php bin/console optimus:batch<br /><br />
+
         <b>serve scalled images for best result</b><br/>
         You should consider adding following thumbnail-sizes in media manager (for SW-Responsive-Theme only):<br/>
         <b>Article</b>: 50x50, 86x86, 170x170, 430x430<br/>

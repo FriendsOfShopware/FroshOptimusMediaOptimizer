@@ -111,12 +111,8 @@ class OptimusOptimizer implements OptimizerInterface
 
     private function optimizeOriginalFiles()
     {
-        ignore_user_abort(true);
-        ini_set('max_execution_time', -1);
-        ini_set('memory_limit', -1);
-        set_time_limit(0);
 
-        $sql = "SELECT * FROM s_media where albumID<>-13 AND type='IMAGE' and path not like('%thumb_export%') and extension in('jpg','png') and userID<>-1 ORDER by id DESC /* LIMIT 0,20*/";
+        $sql = "SELECT * FROM s_media where albumID<>-13 AND type='IMAGE' and path not like('%thumb_export%') and extension in('jpg','png') and userID<>-1 ORDER by id DESC LIMIT 0,10";
 
         $mediaResource = \Shopware\Components\Api\Manager::getResource('media');
 

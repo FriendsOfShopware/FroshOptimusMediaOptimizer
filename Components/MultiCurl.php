@@ -55,6 +55,8 @@ Class MultiCurl
      */
     function __construct($max_concurrent = 10)
     {
+        @ini_set('max_execution_time', -1);
+        @set_time_limit(0);
         $this->setMaxConcurrent($max_concurrent);
         $this->_curl_version = curl_version()['version'];
     }
