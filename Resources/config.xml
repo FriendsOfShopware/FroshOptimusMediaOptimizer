@@ -7,12 +7,10 @@
             <label lang="de">Lizenzschlüssel</label>
             <label>license key</label>
         </element>
-
-
         <element type="button">
             <name>checkLicense</name>
             <label lang="de">Lizenz prüfen</label>
-            <label lang="en">Check licence</label>
+            <label>Check licence</label>
             <options>
                 <handler>
                     <![CDATA[
@@ -20,25 +18,23 @@
         xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function () {
             if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                alert(xmlhttp.responseText);
+                Shopware.Notification.createGrowlMessage("Optimus.io", xmlhttp.responseText);
+            } else if(xmlhttp.readyState == 4 && xmlhttp.status == 404) {
+                Shopware.Notification.createGrowlMessage("Optimus.io", "Plugin must be activated");
             }
         }
         xmlhttp.open("GET", "verifyApiKey", false);
         xmlhttp.send();
     }
-
                     ]]>
                 </handler>
             </options>
         </element>
-
-
         <element type="boolean">
             <name>optimizeOriginal</name>
             <label lang="de">Optimiere auch Originalbilder</label>
             <label>optimize original images, too</label>
             <value>true</value>
         </element>
-
     </elements>
 </config>

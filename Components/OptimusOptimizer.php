@@ -2,8 +2,8 @@
 
 namespace TinectOptimusOptimizer\Components;
 
+use Shopware;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
-use Shopware\Components\Plugin\CachedConfigReader;
 
 /**
  * Class OptimusOptimizer
@@ -22,21 +22,21 @@ class OptimusOptimizer implements OptimizerInterface
     private $rootDir;
 
     /**
-     * @var CachedConfigReader
+     * @var array
      */
-    private $cachedConfigReader;
+    private $pluginConfig;
 
     /**
      * OptimusOptimizer constructor.
      * @param OptimusService $optimusService
-     * @param $rootDir
-     * @param CachedConfigReader $cachedConfigReader
+     * @param string $rootDir
+     * @param array $pluginConfig
      */
-    public function __construct(OptimusService $optimusService, $rootDir, CachedConfigReader $cachedConfigReader)
+    public function __construct(OptimusService $optimusService, $rootDir, array $pluginConfig)
     {
         $this->optimusService = $optimusService;
         $this->rootDir = $rootDir;
-        $this->cachedConfigReader = $cachedConfigReader;
+        $this->pluginConfig = $pluginConfig;
     }
 
     /**
@@ -52,19 +52,20 @@ class OptimusOptimizer implements OptimizerInterface
      */
     public function run($filepath)
     {
-
         //ass of SW5.3 media optimizer uses tmp-Folder
         if (!$this->isShopware53()) {
             $filepath = $this->rootDir . $filepath;
         }
 
         $mime = mime_content_type($filepath);
+        $hasWebPSupport = function_exists('imagecreatefromwebp');
 
         switch ($mime) {
             case 'image/webp':
-
+                if (!$hasWebPSupport) {
+                    continue;
+                }
                 if ($this->isShopware53()) {
-
                     $im = imagecreatefromwebp($filepath);
                     imagejpeg($im, $filepath . '.jpg', 100);
                     imagedestroy($im);
@@ -97,19 +98,14 @@ class OptimusOptimizer implements OptimizerInterface
                 $this->optimusService->optimize($filepath);
                 break;
         }
-
-        $config = $this->cachedConfigReader->getByPluginName('TinectOptimusOptimizer');
-        if ($config['optimizeOriginal']) {
+        if ($this->pluginConfig['optimizeOriginal']) {
             $this->optimizeOriginalFiles();
         }
-
     }
 
 
     private function optimizeOriginalFiles()
     {
-
-        //TODO: optimize code!
         ignore_user_abort(true);
         ini_set('max_execution_time', -1);
         ini_set('memory_limit', -1);
@@ -175,33 +171,6 @@ class OptimusOptimizer implements OptimizerInterface
         return $this->optimusService->verifyApiKey();
     }
 
-
-    /**
-     * Returns the extension of the file with passed path
-     *
-     * @param string
-     *
-     * @return string
-     */
-    private function getImageExtension($path)
-    {
-        $pathInfo = pathinfo($path);
-        return $pathInfo['extension'];
-    }
-
-    /**
-     * Compare versions.
-     * @param string $version Like: 5.0.0
-     * @param string $operator Like: <=
-     *
-     * @return mixed
-     */
-    public function versionCompare($version, $operator)
-    {
-        // return by default version compare
-        return version_compare(Shopware()->Config()->get('Version'), $version, $operator);
-    }
-
     /**
      * Check if current environment is shopware 5.
      *
@@ -209,8 +178,6 @@ class OptimusOptimizer implements OptimizerInterface
      */
     public function isShopware53()
     {
-        return $this->versionCompare('5.3.0', '>=');
+        return version_compare(Shopware::VERSION, '5.3.0', '>=');
     }
-
-
 }
