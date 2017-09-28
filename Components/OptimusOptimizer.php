@@ -27,6 +27,11 @@ class OptimusOptimizer implements OptimizerInterface
     private $pluginConfig;
 
     /**
+     * @var array
+     */
+    public static $supportedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+
+    /**
      * OptimusOptimizer constructor.
      * @param OptimusService $optimusService
      * @param string $rootDir
@@ -158,7 +163,7 @@ class OptimusOptimizer implements OptimizerInterface
      */
     public function getSupportedMimeTypes()
     {
-        return ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+        return self::$supportedMimeTypes;
     }
 
     /**
