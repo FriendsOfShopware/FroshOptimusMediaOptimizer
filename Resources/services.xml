@@ -21,5 +21,9 @@
             <factory service="shopware.plugin.cached_config_reader" method="getByPluginName"/>
             <argument type="string">TinectOptimusOptimizer</argument>
         </service>
+
+        <service id="optimus_optimizer.commands.batch" class="TinectOptimusOptimizer\Commands\BatchOptimizerCommand">
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>
