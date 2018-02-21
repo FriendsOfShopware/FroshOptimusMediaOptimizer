@@ -3,7 +3,7 @@ optimizing thumbnails with [optimus.io](https://optimus.io/)
 
 # WARNING
 optimus.io _improved_ their optimize-algorithm. This causes ugly texts on images!
-They also added a limit a limit of 3 images/second.
+They also added a limit of 3 images/second.
 
 
 # Description
