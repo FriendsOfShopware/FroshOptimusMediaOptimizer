@@ -3,6 +3,7 @@ optimizing thumbnails with [optimus.io](https://optimus.io/)
 
 # WARNING
 optimus.io _improved_ their optimize-algorithm. This causes ugly texts on images!
+So, please don't use this, when using texts in images!
 They also added a limit of 3 images/second.
 
 
@@ -19,7 +20,6 @@ Works great with [ShyimWebP](https://github.com/shyim/shyimwebp)
 * enter your valid license-code of [optimus.io](https://optimus.io/)
 
 ## future features:
-* add license-key check
 * ...
 
 ## [Buy me a coffee](https://www.paypal.me/tinect/)
