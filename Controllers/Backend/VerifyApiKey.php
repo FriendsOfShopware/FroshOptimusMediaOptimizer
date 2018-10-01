@@ -21,12 +21,11 @@ class Shopware_Controllers_Backend_VerifyApiKey extends \Enlight_Controller_Acti
         } else {
             $optimus = new OptimusService($config['optimusLicenseKey']);
             if ($optimus->verifyApiKey()) {
-                echo $config['optimusLicenseKey'] . " is valid";
+                $this->response->setBody($config['optimusLicenseKey'] . " is valid");
             } else {
-                echo $config['optimusLicenseKey'] . " is NOT valid";
+                $this->response->setBody($config['optimusLicenseKey'] . " is NOT valid");
             }
         }
-        exit();
     }
 
 

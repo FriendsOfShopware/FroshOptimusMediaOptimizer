@@ -86,11 +86,11 @@ class OptimusOptimizer implements OptimizerInterface
                     $jpgPath = str_replace('.webp', '.jpg', $filepath);
                     $pngPath = str_replace('.webp', '.png', $filepath);
 
-                    if (@file_exists($jpgPath)) {
+                    if (file_exists($jpgPath)) {
                         $this->optimusService->optimize($jpgPath,
                             'webp',
                             $filepath);
-                    } elseif (@file_exists($pngPath)) {
+                    } elseif (file_exists($pngPath)) {
                         $this->optimusService->optimize($pngPath,
                             'webp',
                             $filepath);
@@ -115,16 +115,21 @@ class OptimusOptimizer implements OptimizerInterface
         $sql = "SELECT * FROM s_media where albumID<>-13 AND type='IMAGE' and path not like('%thumb_export%') and extension in('jpg','png') and userID<>-1 ORDER by id DESC LIMIT 0,10";
 
         $mediaResource = \Shopware\Components\Api\Manager::getResource('media');
+        $mediaservice = Shopware()->Container()->get('shopware_media.media_service');
+
 
         foreach (Shopware()->Db()->fetchAll($sql) as $media) {
 
             $mediainfo = $mediaResource->getOne($media["id"]);
+
             $path = explode("/media", $mediainfo["path"]);
-            $filepath = $this->rootDir . "/media" . $path[1];
-            $origFilesize = @filesize($filepath);
-            $masse = @getimagesize($filepath);
-            $breite = $masse[0];
-            $hoehe = $masse[1];
+            $localfilepath = $this->rootDir . "/media" . $path[1];
+
+            $origFilesize = $mediaservice->getSize($mediainfo["path"]);
+            $masse = getimagesize($mediainfo["path"]);
+            $breite = (int)$masse[0];
+            $hoehe = (int)$masse[1];
+
 
             if ($origFilesize > 0) {
 
@@ -134,20 +139,28 @@ class OptimusOptimizer implements OptimizerInterface
                 */
                 if (($origFilesize / 1024) < 5000 && $breite < 10000 && $hoehe < 10000 && $breite > 0 && $hoehe > 0) {
 
+                    if($mediaservice->getAdapterType() === 'local') {
+                        $filepath = $localfilepath;
+                    } else {
+                        $file = tmpfile();
+                        $filepath = stream_get_meta_data($file)['uri'];
+                        file_put_contents($filepath, $mediaservice->read($mediainfo["path"]));
+                    }
 
                     try {
                         $this->optimusService->optimize($filepath);
-                        $filesize = @filesize($filepath);
-                        Shopware()->Db()->query("UPDATE s_media SET file_size=" . $filesize . ",userID=-1 WHERE id=" . $media["id"]);
-
+                        $filesize = filesize($filepath);
+                        Shopware()->Db()->query('UPDATE s_media SET file_size=?,userID=-1 WHERE id=?',
+                            [$filesize, $media['id']]);
                     } catch (\Exception $e) {
                     }
 
+                    if($mediaservice->getAdapterType() !== 'local') {
+                        $mediaservice->writeStream('/media' . $path[1],$file);
+                    }
+
                 }
-
             }
-
-
         }
 
         return true;
@@ -164,12 +177,22 @@ class OptimusOptimizer implements OptimizerInterface
 
     /**
      * @return bool
+     * @throws \Zend_Cache_Exception
      */
     public function isRunnable()
     {
-        return true;
-        //TODO: Implement and Cache result!
-        return $this->optimusService->verifyApiKey();
+        /** @var \Zend_Cache_Core $cache */
+        $cache = Shopware()->Container()->get('shopware.cache_manager')->getCoreCache();
+
+        $cacheKey = md5($this->optimusService->getApiKey() . 'optimus');
+        $cacheValue = $cache->load($cacheKey);
+
+        if (!$cacheValue) {
+            $cacheValue = $this->optimusService->verifyApiKey();
+            $cache->save($cacheValue, $cacheKey);
+        }
+
+        return $cacheValue;
     }
 
     /**
