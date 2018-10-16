@@ -29,7 +29,7 @@ class OptimusOptimizer implements OptimizerInterface
     /**
      * @var array
      */
-    public static $supportedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
+    public static $supportedMimeTypes = ['image/jpeg', 'image/jpg', 'image/webp'];
 
     /**
      * OptimusOptimizer constructor.
