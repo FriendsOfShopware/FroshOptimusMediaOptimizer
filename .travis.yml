@@ -1,0 +1,31 @@
+language: php
+
+php:
+  - 7.2
+
+sudo: false
+
+env:
+  global:
+    - PLUGIN_NAME=TinectOptimusOptimizer
+
+cache:
+  directories:
+    - "${HOME}/.composer/cache/files"
+
+install:
+  - composer install
+
+script:
+  - "./build.sh $TRAVIS_TAG"
+
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: lEpEgHR4xq9a7fKer7uJIHtqc+va56eeZWCg+CeQjzqO7rM2cIFCMpPgjbvfvuen1ehS64DwAVhLhqVTrFTP/NJhj7VbjXNnsS6mDMkl6F7ojwGAXAPVD6ij1ZTPXLFkimEiAa+OeE6MnOAZ60Rj6uuc3GqvFeRF6CCLO/4zOqLC40EA1LgjwBXI4o1drFCdmuHoR176z5h0fnNjnNbeJxHVQVaLwyyFnM7rP+Piig3nAVLsDTqTiB2d4MguM1zBVdpcg+kKV7+Rn2ML5F3kdKmibqlbZ47fOs1Ru/a3WEudJd7z6x4XlnbcByLxJnyPcMQJgUlSZbBI6AOpZuSVB8XWVPqRU1gz8AHQY1GgSXd0l4KhacG8m992HZuo/wcAJduoKSRJ/vg/xQ9hGuHZhXDUK40qQNo6Bny8jrgRDL5DIkpjTAJN+8/YGdN7rj5QiWFUSTurLkcwIm4sA9KT/jRqG7avLWxAaZNPWRKgU8xhEfK3Pd1AtF1PfQQLYUrpXIoi0Aug4b86mO/qY/3tpxCIOU6UWzpC2/f7f7l00csq4zZw0hbE7IqHzxuRIaKXDb9wJl2VUL6dYhXzd6dtNJoCOll9slP/4Tpyg4+FgmAVyEDcIhdGZq7KR2lwQb2TNqScvPjF7I5aueFpTrYHvDO3Op/Lu4SnNiVm5orQsPI=
+  file_glob: true
+  file: TinectOptimusOptimizer*.zip
+  on:
+    repo: tinect/TinectOptimusOptimizer
+    tags: true
