@@ -25,5 +25,10 @@
         <service id="optimus_optimizer.commands.batch" class="TinectOptimusOptimizer\Commands\BatchOptimizerCommand">
             <tag name="console.command"/>
         </service>
+
+        <service id="shyim_webp.services.webp_encoders.optimus" class="TinectOptimusOptimizer\Services\WebpEncoders\Optimus">
+            <tag name="shyim_webp.webp_encoder" priority="500" />
+            <argument type="service" id="optimus_optimizer.service"/>
+        </service>
     </services>
 </container>

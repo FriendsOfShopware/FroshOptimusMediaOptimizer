@@ -57,7 +57,7 @@ class OptimusOptimizer implements OptimizerInterface
      */
     public function run($filepath)
     {
-        //ass of SW5.3 media optimizer uses tmp-Folder
+        //as of SW5.3 media optimizer uses tmp-Folder
         if (!$this->isShopware53()) {
             $filepath = $this->rootDir . $filepath;
         }
@@ -84,14 +84,9 @@ class OptimusOptimizer implements OptimizerInterface
 
                     //TODO: Test in 5.2.17
                     $jpgPath = str_replace('.webp', '.jpg', $filepath);
-                    $pngPath = str_replace('.webp', '.png', $filepath);
 
                     if (file_exists($jpgPath)) {
                         $this->optimusService->optimize($jpgPath,
-                            'webp',
-                            $filepath);
-                    } elseif (file_exists($pngPath)) {
-                        $this->optimusService->optimize($pngPath,
                             'webp',
                             $filepath);
                     }
@@ -112,7 +107,7 @@ class OptimusOptimizer implements OptimizerInterface
     private function optimizeOriginalFiles()
     {
 
-        $sql = "SELECT * FROM s_media where albumID<>-13 AND type='IMAGE' and path not like('%thumb_export%') and extension in('jpg','png') and userID<>-1 ORDER by id DESC LIMIT 0,10";
+        $sql = "SELECT * FROM s_media where albumID<>-13 AND type='IMAGE' and path not like('%thumb_export%') and extension in('jpg') and userID<>-1 ORDER by id DESC LIMIT 0,10";
 
         $mediaResource = \Shopware\Components\Api\Manager::getResource('media');
         $mediaservice = Shopware()->Container()->get('shopware_media.media_service');
