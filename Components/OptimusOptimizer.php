@@ -1,13 +1,13 @@
 <?php
 
-namespace TinectOptimusOptimizer\Components;
+namespace FroshOptimusMediaOptimizer\Components;
 
 use Shopware;
 use Shopware\Bundle\MediaBundle\Optimizer\OptimizerInterface;
 
 /**
  * Class OptimusOptimizer
- * @package TinectOptimusOptimizer\Components
+ * @package FroshOptimusMediaOptimizer\Components
  */
 class OptimusOptimizer implements OptimizerInterface
 {

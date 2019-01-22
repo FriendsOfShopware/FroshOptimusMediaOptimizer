@@ -1,6 +1,6 @@
 <?php
 
-namespace TinectOptimusOptimizer\Components;
+namespace FroshOptimusMediaOptimizer\Components;
 
 /**
  * Class MultiCurl

@@ -1,10 +1,10 @@
 <?php
 
-namespace TinectOptimusOptimizer\Components;
+namespace FroshOptimusMediaOptimizer\Components;
 
 /**
  * Class OptimusApiException
- * @package TinectOptimusOptimizer\Components
+ * @package FroshOptimusMediaOptimizer\Components
  */
 class OptimusApiException extends \Exception
 {

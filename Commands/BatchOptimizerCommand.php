@@ -1,19 +1,19 @@
 <?php
 
 
-namespace TinectOptimusOptimizer\Commands;
+namespace FroshOptimusMediaOptimizer\Commands;
 
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use TinectOptimusOptimizer\Components\MultiCurl;
-use TinectOptimusOptimizer\Components\OptimusOptimizer;
+use FroshOptimusMediaOptimizer\Components\MultiCurl;
+use FroshOptimusMediaOptimizer\Components\OptimusOptimizer;
 
 /**
  * Class BatchOptimizerCommand
- * @package TinectOptimusOptimizer\Commands
+ * @package FroshOptimusMediaOptimizer\Commands
  */
 class BatchOptimizerCommand extends ShopwareCommand
 {

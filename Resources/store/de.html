@@ -1,0 +1,42 @@
+<h2>Optimieren Sie Ihre Bilder bestmöglich</h2>
+<p>Quälen Sie Ihre Besucher nicht länger mit langen Ladezeiten!</p>
+
+<h2>Optimus.io ist der Beste</h2>
+<p>
+    Dieses Plugin optimiert Ihre JPGs aus dem Shop mithilfe von <a href="https://optimus.io/" target="_blank">optimus.io</a>.<br>
+    Alle neuen Bilder werden automatisch optimiert.<br>
+    Nach eigenen Erfahrungen, ist <a href="https://optimus.io/" target="_blank">optimus.io</a> der beste Bildoptimierer für JPGs - auch für unseren Freund Google.
+</p>
+
+<h2>Keine PNGs?</h2>
+<p>
+    Wir haben absichtlich auf die Implementierung von PNGs verzichtet, da <a href="https://optimus.io/" target="_blank">optimus.io</a> diese nicht optimal komprimieren kann.<br>
+    Google-Insights interessiert zwar die Dateigröße bei PNGs nicht, aber dennoch wollen wir ja auch die bestmögliche Geschwindigkeit für den Besucher.<br>
+    Für die Optimierung von PNGs empfehlen wir ganz klar <a href="https://store.shopware.com/search?sSearch=tinypng" target="_blank">TinyPNG</a>.
+</p>
+
+<h2>&quot;Ich habe schon Bilder im Shop!&quot;</h2>
+<p>
+    Kein Problem! Sie haben mehrere Möglichkeiten, Ihre bestehenden Bilder zu optimieren:
+    <ol>
+        <li>Generieren Sie via <a href="https://docs.shopware.com/de/shopware-5-de/tutorials-und-faq/shopware-cli" target="_blank">Command</a> alle Thumbnails neu: php bin/console sw:thumbnail:generate -f</li>
+        <li>Per eigenen <a href="https://docs.shopware.com/de/shopware-5-de/tutorials-und-faq/shopware-cli" target="_blank">Command</a>, der alle Bilder aufsucht und optimiert: php bin/console optimus:batch</li>
+        <li>Per Backend im Medienmanager je Album-Einstellung auf &quot;Thumbnails generieren&quot;. Als Stapelgröße wird ausdrücklich &quot;1&quot; empfohlen!</li>
+    </ol>
+</p>
+
+<h2>Beschränkungen und sonstige Empfehlungen</h2>
+<h3>Limit 3 Bilder/s:</h3>
+<p>optimus.io hat ein Limit von 3 Bildern pro Sekunde, was den Upload erheblich verlangsamt. Aber das Ergebnis kann sich immer noch gut sehen lassen.</p>
+<h3>zusätzliche Thumbnailgrößen bei Verwendung des Responsive-Themes:</h3>
+<p><b>Artikel</b>: 50x50, 86x86, 170x170, 430x430<br/><b>Einkaufswelten</b>: 293x293, 931x931, 1160x1160</p>
+
+<p>
+    <a href="https://github.com/FriendsOfShopware/FroshOptimusMediaOptimizer" target="_blank" style="display: inline-block;"><img src="https://img.shields.io/badge/Github-FroshOptimusMediaOptimizer-green.svg"></a><br>
+    Dieses Plugin wird von <a href="https://store.shopware.com/friends-of-shopware.html" target="_blank">@FriendsOfShopware</a> entwickelt.
+    Maintainer dieses Plugins ist: <a href="https://github.com/tinect" target="_blank">Sebastian König</a>
+</p>
+
+<p>
+    Bei Fragen / Fehlern bitte ein <a href="https://github.com/FriendsOfShopware/FroshOptimusMediaOptimizer/issues/new" target="_blank">Github Issue</a> erstellen
+</p>
