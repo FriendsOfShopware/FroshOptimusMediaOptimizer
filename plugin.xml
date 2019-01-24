@@ -11,7 +11,9 @@
     <link>https://github.com/FriendsOfShopware/FroshOptimusMediaOptimizer</link>
     <author>Friends of Shopware</author>
 
-    <compatibility minVersion="5.2.17"/>
+    <compatibility minVersion="5.2.17">
+        <blacklist>TinectOptimusOptimizer</blacklist>
+    </compatibility>
 
     <description>Optimize your images with optimus.io for best results</description>
     <description>Optimiere deine Bilder voll automatisch mit optimus.io für beste Ergebnisse</description>
