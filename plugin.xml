@@ -16,7 +16,7 @@
     </compatibility>
 
     <description>Optimize your images with optimus.io for best results</description>
-    <description>Optimiere deine Bilder voll automatisch mit optimus.io für beste Ergebnisse</description>
+    <description lang="de">Optimiere deine Bilder voll automatisch mit optimus.io für beste Ergebnisse</description>
 
     <changelog version="1.0.4">
         <changes lang="de">Willkommen bei Frosh</changes>
