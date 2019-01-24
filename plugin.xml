@@ -1,33 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.2/engine/Shopware/Components/Plugin/schema/plugin.xsd">
-    <label lang="de">TinectOptimusOptimizer</label>
-    <label lang="en">TinectOptimusOptimizer</label>
-    <version>1.0.3/version>
-    <link>http://www.tinect.de/</link>
-    <author>Sebastian König</author>
-    <copyright>(c)</copyright>
-    <compatibility minVersion="5.2.17"/>
+    <label lang="de">FroshOptimusMediaOptimizer</label>
+    <label lang="en">FroshOptimusMediaOptimizer</label>
+
+    <version>1.0.4</version>
+
+    <copyright>Friends of Shopware</copyright>
     <license>MIT</license>
-    <description>
-        <![CDATA[
+    <link>https://github.com/FriendsOfShopware/FroshOptimusMediaOptimizer</link>
+    <author>Friends of Shopware</author>
 
-        <b>You'll need a licence of optimus.io</b><br />
-        optimizing thumbnails with <a href='https://optimus.io/' target='_blank'>optimus.io</a>
-        <br /><br />
-        Converts JPG- and PNG-Images for best score in google-insights.<br />
-        Supports webp-optimization, if jpg or png exists.<br /><br />
+    <compatibility minVersion="5.2.17">
+        <blacklist>TinectOptimusOptimizer</blacklist>
+    </compatibility>
 
-        We recommend running the CLI-Command after installation to optimize all images in media:<br/>
-        php bin/console optimus:batch<br /><br />
+    <description>Optimize your images with optimus.io for best results</description>
+    <description>Optimiere deine Bilder voll automatisch mit optimus.io für beste Ergebnisse</description>
 
-        <b>serve scalled images for best result</b><br/>
-        You should consider adding following thumbnail-sizes in media manager (for SW-Responsive-Theme only):<br/>
-        <b>Article</b>: 50x50, 86x86, 170x170, 430x430<br/>
-        <b>Shopping worlds</b>: 293x293, 931x931, 1160x1160<br/>
-
-        ]]>
-    </description>
+    <changelog version="1.0.4">
+        <changes lang="de">Willkommen bei Frosh</changes>
+        <changes lang="en">Welcome to Frosh</changes>
+    </changelog>
 
     <changelog version="1.0.3">
         <changes lang="de"><![CDATA[

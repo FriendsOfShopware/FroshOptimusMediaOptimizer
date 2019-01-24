@@ -9,11 +9,11 @@ if [ -z ${commit} ]; then
 fi
 
 # Remove old release
-rm -rf TinectOptimusOptimizer TinectOptimusOptimizer-*.zip
+rm -rf ${PLUGIN_NAME} ${PLUGIN_NAME}*.zip
 
 # Build new release
-mkdir -p TinectOptimusOptimizer
-git archive ${commit} | tar -x -C TinectOptimusOptimizer
-composer install --no-dev -n -o -d TinectOptimusOptimizer
-( find ./TinectOptimusOptimizer -type d -name ".git" && find ./TinectOptimusOptimizer -name ".gitignore" && find ./TinectOptimusOptimizer -name ".gitmodules" ) | xargs rm -r
-zip -r TinectOptimusOptimizer-${commit}.zip TinectOptimusOptimizer
+mkdir -p ${PLUGIN_NAME}
+git archive ${commit} | tar -x -C ${PLUGIN_NAME}
+composer install --no-dev -n -o -d ${PLUGIN_NAME}
+( find ./${PLUGIN_NAME} -type d -name ".git" && find ./${PLUGIN_NAME} -name "build.sh" && find ./${PLUGIN_NAME} -name "*.xlsx" && find ./${PLUGIN_NAME} -name "*.md"  && find ./${PLUGIN_NAME} -name ".gitignore" && find ./${PLUGIN_NAME} -name ".gitmodules" ) | xargs rm -r
+zip -r ${PLUGIN_NAME}-${commit}.zip ${PLUGIN_NAME}

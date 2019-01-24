@@ -1,7 +1,7 @@
 <?php
 
 
-use TinectOptimusOptimizer\Components\OptimusService;
+use FroshOptimusMediaOptimizer\Components\OptimusService;
 
 class Shopware_Controllers_Backend_VerifyApiKey extends \Enlight_Controller_Action implements \Shopware\Components\CSRFWhitelistAware
 {
@@ -12,9 +12,8 @@ class Shopware_Controllers_Backend_VerifyApiKey extends \Enlight_Controller_Acti
 
     public function indexAction()
     {
-
         $this->container->get('front')->Plugins()->ViewRenderer()->setNoRender();
-        $config = Shopware()->Container()->get('shopware.plugin.config_reader')->getByPluginName('TinectOptimusOptimizer');
+        $config = Shopware()->Container()->get('shopware.plugin.config_reader')->getByPluginName('FroshOptimusMediaOptimizer');
         
         if (!$config['optimusLicenseKey']) {
             echo "Key is missing! Saved?";

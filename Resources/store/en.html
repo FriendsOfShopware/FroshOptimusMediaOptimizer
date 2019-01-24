@@ -1,0 +1,42 @@
+<h2>Optimize your images as best as possible</h2>
+<p>Stop torturing your visitors with long loading times!</p>
+
+<h2>Optimus.io is the best</h2>
+<p>
+    This plugin optimizes your JPGs from the shop using <a href="https://optimus.io/" target="_blank">optimus.io</a>.<br>
+    All new images are automatically optimized.<br>
+    From our own experience, <a href="https://optimus.io/" target="_blank">optimus.io</a> is the best image optimizer for JPGs - even for our friend Google.
+</p>
+
+<h2>No PNGs?</h2>
+<p>
+    We deliberately avoided implementing PNGs because <a href="https://optimus.io/" target="_blank">optimus.io</a> can not compress them optimally.<br>
+    Although Google Insights is not interested in PNG file sizes, we still want the best possible speed for the visitor.<br>
+    For the optimization of PNGs, we clearly recommend <a href="https://store.shopware.com/en/search?sSearch=tinypng" target="_blank">TinyPNG</a>.
+</p>
+
+<h2>&quot;I already have images in shop!&quot;</h2>
+<p>
+    No problem! There are several ways to optimize your existing images:
+<ol>
+    <li>Generate via <a href="https://docs.shopware.com/en/shopware-5-en/tutorials-and-faq/shopware-cli" target="_blank">Command</a> alle Thumbnails neu: php bin/console sw:thumbnail:generate -f</li>
+    <li>Via own <a href="https://docs.shopware.com/en/shopware-5-en/tutorials-and-faq/shopware-cli" target="_blank">Command</a>, which searches and optimizes all images: php bin/console optimus:batch</li>
+    <li>Via Backend in the media manager using &quot;Generate Thumbnauls&quot; in albums settings. The batch size should be &quot;1&quot;!</li>
+</ol>
+</p>
+
+<h2>Restrictions and other recommendations</h2>
+<h3>Limit 3 images/s:</h3>
+<p>Optimus.io has a limit of 3 frames per second, which slows down the upload considerably. But the result is still good.</p>
+<h3>Additional thumbnail sizes when using the responsive theme:</h3>
+<p><b>Article</b>: 50x50, 86x86, 170x170, 430x430<br/><b>Shopping worlds</b>: 293x293, 931x931, 1160x1160</p>
+
+<p>
+    <a href="https://github.com/FriendsOfShopware/FroshOptimusMediaOptimizer" target="_blank" style="display: inline-block;"><img src="https://img.shields.io/badge/Github-FroshOptimusMediaOptimizer-green.svg"></a><br>
+    This plugin is part of <a href="https://store.shopware.com/en/friends-of-shopware.html" target="_blank">@FriendsOfShopware</a>.
+    Maintainer from the plugin is: <a href="https://github.com/tinect" target="_blank">Sebastian König</a>
+</p>
+
+<p>
+    For questions or bugs please create a <a href="https://github.com/FriendsOfShopware/FroshOptimusMediaOptimizer/issues/new" target="_blank">Github Issue</a>
+</p>

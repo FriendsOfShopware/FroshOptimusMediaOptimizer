@@ -1,12 +1,12 @@
 <?php
 
-namespace TinectOptimusOptimizer\Components;
+namespace FroshOptimusMediaOptimizer\Components;
 
 use Shopware\Components\Plugin\CachedConfigReader;
 
 /**
  * Class OptimusServiceFactory
- * @package TinectOptimusOptimizer\Components
+ * @package FroshOptimusMediaOptimizer\Components
  */
 class OptimusServiceFactory
 {
@@ -16,7 +16,7 @@ class OptimusServiceFactory
      */
     public static function factory(CachedConfigReader $cachedConfigReader)
     {
-        $config = $cachedConfigReader->getByPluginName('TinectOptimusOptimizer');
+        $config = $cachedConfigReader->getByPluginName('FroshOptimusMediaOptimizer');
 
         return new OptimusService($config['optimusLicenseKey']);
     }

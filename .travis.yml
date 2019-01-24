@@ -1,24 +1,91 @@
 language: php
+
 php:
-- 7.2
+  - 5.6
+  - 7.2
+
 sudo: false
+
+services:
+  - mysql
+
 env:
+  matrix:
+    - SHOPWARE_VERSION="5.2"
   global:
-  - PLUGIN_NAME=TinectOptimusOptimizer
+  - PLUGIN_NAME=FroshOptimusMediaOptimizer
+  - SHOPWARE_DIRECTORY="${HOME}/shopware"
+  - PLUGIN_DIRECTORY="${SHOPWARE_DIRECTORY}/custom/plugins"
+
 cache:
   directories:
-  - "${HOME}/.composer/cache/files"
+    - ${HOME}/.composer/cache/files
+
 install:
-- composer install
+  - composer install
+
+before_script:
+  - mysql -e 'CREATE DATABASE shopware;'
+  - if [[ "$(php --version | grep -cim1 xdebug)" -ge 1 ]]; then phpenv config-rm xdebug.ini; fi
+  - git clone https://github.com/shopware/shopware.git ${SHOPWARE_DIRECTORY} --branch ${SHOPWARE_VERSION}
+  - ant -f ${SHOPWARE_DIRECTORY}/build/build.xml -Dapp.host=localhost -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-unit
+  - mv ${TRAVIS_BUILD_DIR} ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
+  - php ${HOME}/shopware/bin/console sw:plugin:refresh
+  - php ${HOME}/shopware/bin/console sw:plugin:install ${PLUGIN_NAME}
+  - php ${HOME}/shopware/bin/console sw:plugin:activate ${PLUGIN_NAME}
+  - cd ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
+
 script:
-- "./build.sh $TRAVIS_TAG"
+  -
+
+after_success:
+  - chmod +x ./build.sh
+  - ./build.sh $TRAVIS_TAG
+
+stages:
+  - test
+  - name: Store-Check
+    if: tag IS blank AND env(PLUGIN_ID) IS present AND type != pull_request
+  - name: Store-Sync
+    if: branch = master AND env(PLUGIN_ID) IS present AND type != pull_request
+  - name: Store-Deploy
+    if: tag IS present
+
+jobs:
+  include:
+    - stage: Store-Check
+      php: 7.3
+      before_script: skip
+      install:
+        - chmod +x ./build.sh
+        - ./build.sh "master"
+        - wget 'https://github.com/FriendsOfShopware/FroshPluginUploader/blob/master/frosh-plugin-upload.phar?raw=true' -O frosh-plugin-upload.phar
+      script:
+        - php frosh-plugin-upload.phar plugin:validate ${TRAVIS_BUILD_DIR}/${PLUGIN_NAME}*.zip
+    - stage: Store-Sync
+      before_script: skip
+      php: 7.3
+      install:
+        - wget 'https://github.com/FriendsOfShopware/FroshPluginUploader/blob/master/frosh-plugin-upload.phar?raw=true' -O frosh-plugin-upload.phar
+      script:
+        - php frosh-plugin-upload.phar plugin:update ${TRAVIS_BUILD_DIR}/Resources/store
+    - stage: Store-Deploy
+      before_script: skip
+      php: 7.3
+      install:
+        - wget 'https://github.com/FriendsOfShopware/FroshPluginUploader/blob/master/frosh-plugin-upload.phar?raw=true' -O frosh-plugin-upload.phar
+      script:
+        - chmod +x ./build.sh
+        - ./build.sh
+        - php frosh-plugin-upload.phar plugin:upload ${TRAVIS_BUILD_DIR}/${PLUGIN_NAME}*.zip
+
 deploy:
   provider: releases
   api_key:
-    secure: tKluq6DuOYx+J6IVu31EyBTQDWDNZg7636r/v++WstWqUgh1fCXP3+88IspCkp4NxUJ/CumW9MiiUPxjeRcmPoZjqcRLpJiHjZ2wlI1Siig0/tKT38dYIvFJL+an+076geNK95aMUAnoGtA3ylOBRM9Ss+L/ZCxDUYH+WQ1OBAXcIP7arA73l4RtD/Uf/QdfeHcUBPLgo0tvYxAqSpogGYCs+0EfG7HslpCwCRZHpIujpOICfDK1aBrNwFbBwemdwpa1nn9HQCYNBiL8ZS3k5jWHO0Z8y5NTcC3ZyGqEnyZ6C36sOfMx6Cfw69Pg4EpP1Z90ecBX4kfYESNB1BoZ44jX2fuLw1vfwxbjptNWJASpLPS4g4dCtz6Ew7RxIqPJ6OpgfW8RWvcco2fFi3IpnXt5bUOcaQUeTzAb2NySP7xLtPuZmqx/l6MDOydWAUqbCMwRo7IxG8KUB8oo4BzSI4QmYHG4Q/TChn90/FXY3kIFUV5+kPMfiWKbY3Kr5svFPdPvaYuMt++mOLffgTOI1XXibmVKPpbm0pbHhI+VDs388J5595r+TC5aj+LAYakkGzgaBblx1oownzAbIct4DiaE5J0C+iU9xPf3R+6KtTDI72tLiuUNfXCCVQ9TAsnfOeeeTAxP8o/QLToufSPpphbZdd74W/L6XwG0sCg405U=
+    secure: 44wjV0H2zlJt4UXKnyv2YjyLGxLA2YMszSf2E79MgvfnSVCSnchfK4/ETZtWy4UEca4YiqF/RBdsO6dc1hiAQejhbdTVU6Ez69c8GYraRbhGb4N/NT7y0wbgT3JrNjzrUluVZwHcXq/OTYs/6/OtpfYfVeBFz0LS6mr3EeOgC0Oly90AdeIdtGR88IQ+BvZCrVA/rcXLwu2Er2EZJDArrD3jUgzsTKu0M5dvQIl0WhR04XJ7HnZ1BNsqobeSenhZEfuaVDWT/bj0aiTeekMlH1MGifTfQUJhpA/2WkL4z6uKNbJzAeAKfUANx4civQWTDJcJnf4LAzmlfTy2nawx+8RihP+QGk+0pdSl1VIQF19lSZer0xJk1ts2pZExNo2adHtYnHnNHy2640uCGhX6wp3wRX77V/Igu8HHzxZf84xLYeUHtea5yscSKsm8iid1sDV7PAKmBeiCJQN06rxN+OI0FVFr+SyHW69UhOf/0nvvgOkM9tpgY9JAkoSs7FksyyU56m/j5PqoQkU4Ko/Ns58KrjsKNAKRCVRnxV3lRWYDjncgZd24MhOgq9Hnm7UXuacd5yAsswdMXgnrZhHZASddAke2gipxQWi4fO/i4ayQ5PHUx3k1EulxZaAGXa9DerVIsPlygDdzwlR2k84utgIPQNyQlrW2rTUArSKWcrQ=
   file_glob: true
-  file: TinectOptimusOptimizer*.zip
+  file: $PLUGIN_NAME*.zip
   skip_cleanup: true
   on:
-    repo: tinect/TinectOptimusOptimizer
+    repo: FriendsOfShopware/FroshOptimusMediaOptimizer
     tags: true

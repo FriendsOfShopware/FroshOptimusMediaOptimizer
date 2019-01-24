@@ -3,15 +3,15 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="optimus_optimizer.service_factory"
-                 class="TinectOptimusOptimizer\Components\OptimusServiceFactory"/>
+                 class="FroshOptimusMediaOptimizer\Components\OptimusServiceFactory"/>
 
-        <service id="optimus_optimizer.service" class="TinectOptimusOptimizer\Components\OptimusService">
+        <service id="optimus_optimizer.service" class="FroshOptimusMediaOptimizer\Components\OptimusService">
             <factory service="optimus_optimizer.service_factory" method="factory"/>
             <argument type="service" id="shopware.plugin.cached_config_reader"/>
         </service>
 
-        <service id="optimus_optimizer.image_optimizer" class="TinectOptimusOptimizer\Components\OptimusOptimizer">
-            <tag name="shopware_media.optimizer" priority="500"/>
+        <service id="optimus_optimizer.image_optimizer" class="FroshOptimusMediaOptimizer\Components\OptimusOptimizer">
+            <tag name="shopware_media.optimizer" priority="501"/>
             <argument type="service" id="optimus_optimizer.service"/>
             <argument type="string">%kernel.root_dir%/</argument>
             <argument type="service" id="optimus_optimizer.config"/>
@@ -19,16 +19,12 @@
 
         <service id="optimus_optimizer.config" class="Shopware\Components\Plugin\CachedConfigReader">
             <factory service="shopware.plugin.cached_config_reader" method="getByPluginName"/>
-            <argument type="string">TinectOptimusOptimizer</argument>
+            <argument type="string">FroshOptimusMediaOptimizer</argument>
         </service>
 
-        <service id="optimus_optimizer.commands.batch" class="TinectOptimusOptimizer\Commands\BatchOptimizerCommand">
+        <service id="optimus_optimizer.commands.batch" class="FroshOptimusMediaOptimizer\Commands\BatchOptimizerCommand">
             <tag name="console.command"/>
         </service>
 
-        <service id="shyim_webp.services.webp_encoders.optimus" class="TinectOptimusOptimizer\Services\WebpEncoders\Optimus">
-            <tag name="shyim_webp.webp_encoder" priority="500" />
-            <argument type="service" id="optimus_optimizer.service"/>
-        </service>
     </services>
 </container>
