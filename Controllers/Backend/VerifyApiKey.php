@@ -1,6 +1,5 @@
 <?php
 
-
 use FroshOptimusMediaOptimizer\Components\OptimusService;
 
 class Shopware_Controllers_Backend_VerifyApiKey extends \Enlight_Controller_Action implements \Shopware\Components\CSRFWhitelistAware
@@ -14,20 +13,16 @@ class Shopware_Controllers_Backend_VerifyApiKey extends \Enlight_Controller_Acti
     {
         $this->container->get('front')->Plugins()->ViewRenderer()->setNoRender();
         $config = Shopware()->Container()->get('shopware.plugin.config_reader')->getByPluginName('FroshOptimusMediaOptimizer');
-        
+
         if (!$config['optimusLicenseKey']) {
-            echo "Key is missing! Saved?";
+            echo 'Key is missing! Saved?';
         } else {
             $optimus = new OptimusService($config['optimusLicenseKey']);
             if ($optimus->verifyApiKey()) {
-                $this->response->setBody($config['optimusLicenseKey'] . " is valid");
+                $this->response->setBody($config['optimusLicenseKey'] . ' is valid');
             } else {
-                $this->response->setBody($config['optimusLicenseKey'] . " is NOT valid");
+                $this->response->setBody($config['optimusLicenseKey'] . ' is NOT valid');
             }
         }
     }
-
-
 }
-
-?>

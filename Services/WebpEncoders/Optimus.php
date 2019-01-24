@@ -1,17 +1,28 @@
 <?php
-namespace TinectOptimusOptimizer\Services\WebpEncoders;
-use Shopware\Components\Plugin\CachedConfigReader;
-use ShyimWebP\Components\WebpEncoderInterface;
-use TinectOptimusOptimizer\Components\OptimusService;
+
+namespace FroshOptimusMediaOptimizer\Services\WebpEncoders;
+
+use FroshOptimusMediaOptimizer\Components\OptimusService;
+use FroshWebP\Components\WebpEncoderInterface;
+use Shopware\Components\CacheManager;
+use Shopware\Components\Plugin\ConfigReader;
 
 class Optimus implements WebpEncoderInterface
 {
     /** @var array */
     private $optimusService;
 
-    public function __construct(OptimusService $optimusService)
+    /** @var ConfigReader */
+    private $configReader;
+
+    /** @var CacheManager */
+    private $cacheManager;
+
+    public function __construct(OptimusService $optimusService, ConfigReader $configReader, CacheManager $cacheManager)
     {
         $this->optimusService = $optimusService;
+        $this->configReader = $configReader;
+        $this->cacheManager = $cacheManager;
     }
 
     /** {@inheritdoc} */
@@ -23,9 +34,16 @@ class Optimus implements WebpEncoderInterface
     /** {@inheritdoc} */
     public function encode($image, $quality)
     {
+        ob_start();
+        imagejpeg($image);
+        $contents =  ob_get_contents();
+        ob_end_clean();
+        imagedestroy($image);
+
         $file = tmpfile();
         $filepath = stream_get_meta_data($file)['uri'];
-        file_put_contents($file,$image);
+
+        file_put_contents($filepath, $contents);
 
         $this->optimusService->optimize($filepath, OptimusService::OPTION_WEBP);
 
@@ -35,8 +53,12 @@ class Optimus implements WebpEncoderInterface
     /** {@inheritdoc} */
     public function isRunnable()
     {
+        if (!$this->configReader->getByPluginName('FroshOptimusMediaOptimizer')['webp']) {
+            return false;
+        }
+
         /** @var \Zend_Cache_Core $cache */
-        $cache = Shopware()->Container()->get('shopware.cache_manager')->getCoreCache();
+        $cache = $this->cacheManager->getCoreCache();
 
         $cacheKey = md5($this->optimusService->getApiKey() . 'optimus');
         $cacheValue = $cache->load($cacheKey);

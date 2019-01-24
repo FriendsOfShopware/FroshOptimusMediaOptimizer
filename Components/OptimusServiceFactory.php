@@ -6,12 +6,12 @@ use Shopware\Components\Plugin\CachedConfigReader;
 
 /**
  * Class OptimusServiceFactory
- * @package FroshOptimusMediaOptimizer\Components
  */
 class OptimusServiceFactory
 {
     /**
      * @param CachedConfigReader $cachedConfigReader
+     *
      * @return OptimusService
      */
     public static function factory(CachedConfigReader $cachedConfigReader)
