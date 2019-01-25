@@ -9,7 +9,7 @@ use Shopware\Components\Plugin\ConfigReader;
 
 class Optimus implements WebpEncoderInterface
 {
-    /** @var array */
+    /** @var OptimusService */
     private $optimusService;
 
     /** @var ConfigReader */

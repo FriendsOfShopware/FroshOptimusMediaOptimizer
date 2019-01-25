@@ -34,15 +34,15 @@
             <name>optimizeOriginal</name>
             <label lang="de">Optimiere auch Originalbilder</label>
             <label>optimize original images, too</label>
-            <value>true</value>
+            <value>1</value>
         </element>
         <element type="boolean">
             <name>webp</name>
             <label lang="de">Benutze optimus auch für webp-encoding</label>
             <label>Using optimus for webp-encoding, too</label>
+            <value>1</value>
             <description lang="de">Fall Sie FroshWebp einsetzen, kann optimus die Generierung der webp übernehmen. D.h. es werden keine lokalen Services verwendet.</description>
             <description>If you're using FroshWebp, we can generate webp through optimus.</description>
-            <value>true</value>
         </element>
     </elements>
 </config>
