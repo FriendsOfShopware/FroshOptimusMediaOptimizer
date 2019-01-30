@@ -8,7 +8,6 @@
         <service id="optimus_optimizer.service" class="FroshOptimusMediaOptimizer\Components\OptimusService">
             <factory service="optimus_optimizer.service_factory" method="factory"/>
             <argument type="service" id="shopware.plugin.cached_config_reader"/>
-            <argument type="service" id="guzzle_http_client_factory"/>
         </service>
 
         <service id="optimus_optimizer.image_optimizer" class="FroshOptimusMediaOptimizer\Components\OptimusOptimizer">

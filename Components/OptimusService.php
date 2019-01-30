@@ -2,8 +2,6 @@
 
 namespace FroshOptimusMediaOptimizer\Components;
 
-use GuzzleHttp\ClientInterface;
-
 /**
  * Class OptimusService
  */
@@ -22,7 +20,6 @@ class OptimusService
      * @var string
      */
     const OPTION_WEBP = 'webp';
-
     /**
      * @var string
      */
@@ -34,18 +31,11 @@ class OptimusService
     private $endpoint = 'https://api.optimus.io';
 
     /**
-     * @var ClientInterface
-     */
-    private $guzzleClient;
-
-    /**
      * @param string $apiKey
-     * @param ClientInterface $guzzleClient
      */
-    public function __construct($apiKey, ClientInterface $guzzleClient)
+    public function __construct($apiKey)
     {
         $this->apiKey = $apiKey;
-        $this->guzzleClient = $guzzleClient;
     }
 
     /**
@@ -70,12 +60,19 @@ class OptimusService
 
     public function getValidationDate(){
 
+        $curl = curl_init();
+        // Set some options - we are passing in a useragent too here
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://verify.optimus.io/' . $this->apiKey,
+            CURLOPT_USERAGENT => 'WordPress/4;http://www.reflects.de'
+        ]);
+        // Send the request & save response to $resp
+        $resp = curl_exec($curl);
+        // Close request to clear up some resources
+        curl_close($curl);
 
-        $options = ['headers' => ['User-Agent' => 'WordPress/4;http://www.google.de']];
-
-        $result = $this->guzzleClient->get('https://verify.optimus.io/' . $this->apiKey, $options);
-
-        return $result->getBody()->getContents();
+        return $resp;
 
     }
 

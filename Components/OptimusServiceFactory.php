@@ -3,7 +3,6 @@
 namespace FroshOptimusMediaOptimizer\Components;
 
 use Shopware\Components\Plugin\CachedConfigReader;
-use Shopware\Components\HttpClient;
 
 /**
  * Class OptimusServiceFactory
@@ -13,10 +12,9 @@ class OptimusServiceFactory
     /**
      * @param CachedConfigReader $cachedConfigReader
      *
-     * @param HttpClient\GuzzleFactory $guzzleFactory
      * @return OptimusService
      */
-    public static function factory(CachedConfigReader $cachedConfigReader, HttpClient\GuzzleFactory $guzzleFactory)
+    public static function factory(CachedConfigReader $cachedConfigReader)
     {
         $config = $cachedConfigReader->getByPluginName('FroshOptimusMediaOptimizer');
 
@@ -26,6 +24,6 @@ class OptimusServiceFactory
             $optimusLicenseKey = getenv('OPTIMUSLICENSEKEY');
         }
 
-        return new OptimusService($optimusLicenseKey, $guzzleFactory->createClient());
+        return new OptimusService($optimusLicenseKey);
     }
 }
