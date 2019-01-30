@@ -14,7 +14,6 @@ class OptimusTest extends Enlight_Components_Test_Controller_TestCase
         parent::setUp();
 
         $this->connection = Shopware()->Container()->get('dbal_connection');
-        $this->dispatch('/');
     }
 
     public function testTest()
