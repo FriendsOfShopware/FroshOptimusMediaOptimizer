@@ -70,8 +70,7 @@ class OptimusService
 
     public function getValidationDate(){
 
-
-        $options = ['headers' => ['User-Agent' => 'WordPress/4;http://www.google.de']];
+        $options = ['headers' => ['User-Agent' => 'WordPress/4;http://www.google.de', 'verify' => false]];
 
         $result = $this->guzzleClient->get('https://verify.optimus.io/' . $this->apiKey, $options);
 
