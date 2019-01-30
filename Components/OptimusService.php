@@ -58,18 +58,22 @@ class OptimusService
         return $this;
     }
 
-    public function getValidationDate() {
+    public function getValidationDate(){
 
-        $ch = curl_init();
+        $curl = curl_init();
         // Set some options - we are passing in a useragent too here
-        curl_setopt_array($ch, [
+        curl_setopt_array($curl, [
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_URL => 'https://verify.optimus.io/' . $this->apiKey,
-            CURLOPT_USERAGENT => 'WordPress/4;http://www.google.de',
+            CURLOPT_USERAGENT => 'WordPress/4;http://www.reflects.de'
         ]);
-        $response = curl_exec($ch);
+        // Send the request & save response to $resp
+        $resp = curl_exec($curl);
+        // Close request to clear up some resources
+        curl_close($curl);
 
-        return date('Y-m-d',$response);
+        return $resp;
+
     }
 
     /**
@@ -77,6 +81,7 @@ class OptimusService
      */
     public function verifyApiKey()
     {
+
         $ch = curl_init();
         // Set some options - we are passing in a useragent too here
         curl_setopt_array($ch, [
