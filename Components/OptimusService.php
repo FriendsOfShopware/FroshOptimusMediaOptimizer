@@ -58,6 +58,20 @@ class OptimusService
         return $this;
     }
 
+    public function getValidationDate() {
+
+        $ch = curl_init();
+        // Set some options - we are passing in a useragent too here
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://verify.optimus.io/' . $this->apiKey,
+            CURLOPT_USERAGENT => 'WordPress/4;http://www.google.de',
+        ]);
+        $response = curl_exec($ch);
+
+        return date('Y-m-d',$response);
+    }
+
     /**
      * @return bool
      */
