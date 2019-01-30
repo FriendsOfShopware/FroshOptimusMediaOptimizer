@@ -92,6 +92,8 @@ class OptimusService
      * @param string $target
      *
      * @throws OptimusApiException
+     *
+     * @return void
      */
     public function optimize($image, $option = self::OPTION_OPTIMIZE, $target = '')
     {

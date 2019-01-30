@@ -18,6 +18,8 @@ class OptimusServiceFactory
     {
         $config = $cachedConfigReader->getByPluginName('FroshOptimusMediaOptimizer');
 
-        return new OptimusService($config['optimusLicenseKey']);
+        $optimusLicenseKey = getenv('OPTIMUSLICENSEKEY') ?: $config['optimusLicenseKey'];
+
+        return new OptimusService($optimusLicenseKey);
     }
 }

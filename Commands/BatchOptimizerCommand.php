@@ -36,6 +36,8 @@ class BatchOptimizerCommand extends ShopwareCommand
      * @param $imageResult
      * @param $url
      * @param array $options
+     *
+     * @return void
      */
     public static function processCurlCallback($imageResult, $url, array $options)
     {
@@ -52,6 +54,9 @@ class BatchOptimizerCommand extends ShopwareCommand
         $progressBar->advance();
     }
 
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('optimus:batch');
@@ -60,6 +65,8 @@ class BatchOptimizerCommand extends ShopwareCommand
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
+     *
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -82,6 +89,8 @@ class BatchOptimizerCommand extends ShopwareCommand
      * @param MediaServiceInterface $mediaService
      * @param ProgressBar           $progressBar
      * @param OutputInterface       $output
+     *
+     * @return void
      */
     private function optimizeFiles(
         $directory,
