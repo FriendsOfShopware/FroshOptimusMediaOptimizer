@@ -36,7 +36,7 @@ before_script:
   - cd ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
 
 script:
-  -
+  - composer test
 
 after_success:
   - chmod +x ./build.sh
