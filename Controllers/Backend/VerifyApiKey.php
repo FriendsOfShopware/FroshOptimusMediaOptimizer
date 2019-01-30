@@ -13,7 +13,7 @@ class Shopware_Controllers_Backend_VerifyApiKey extends \Enlight_Controller_Acti
         $optimusService = $this->container->get('optimus_optimizer.service');
 
         if (!$optimusService->getApiKey()) {
-            echo 'Key is missing! Saved?';
+            $this->response->setBody('Key is missing! Saved?');
         } else {
             if ($optimusService->verifyApiKey()) {
                 $this->response->setBody($optimusService->getApiKey() . ' is valid');
