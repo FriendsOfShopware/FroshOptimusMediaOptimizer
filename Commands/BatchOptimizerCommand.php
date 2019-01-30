@@ -1,19 +1,17 @@
 <?php
 
-
 namespace FroshOptimusMediaOptimizer\Commands;
 
+use FroshOptimusMediaOptimizer\Components\MultiCurl;
+use FroshOptimusMediaOptimizer\Components\OptimusOptimizer;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use FroshOptimusMediaOptimizer\Components\MultiCurl;
-use FroshOptimusMediaOptimizer\Components\OptimusOptimizer;
 
 /**
  * Class BatchOptimizerCommand
- * @package FroshOptimusMediaOptimizer\Commands
  */
 class BatchOptimizerCommand extends ShopwareCommand
 {
@@ -35,6 +33,28 @@ class BatchOptimizerCommand extends ShopwareCommand
     private $pluginConfig;
 
     /**
+     * @param $imageResult
+     * @param $url
+     * @param array $options
+     *
+     * @return void
+     */
+    public static function processCurlCallback($imageResult, $url, array $options)
+    {
+        $item = $options['user_data']['item'];
+        /** @var MediaServiceInterface $mediaService */
+        $mediaService = $options['user_data']['mediaService'];
+        /** @var ProgressBar $progressBar */
+        $progressBar = $options['user_data']['progressBar'];
+
+        if ($options['http_code'] === 200) {
+            $mediaService->write($item['path'], $imageResult);
+        }
+
+        $progressBar->advance();
+    }
+
+    /**
      * @return void
      */
     protected function configure()
@@ -43,8 +63,9 @@ class BatchOptimizerCommand extends ShopwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -61,14 +82,14 @@ class BatchOptimizerCommand extends ShopwareCommand
         $this->optimizeFiles('media', $mediaService, $progress, $output);
 
         $progress->finish();
-
     }
 
     /**
      * @param $directory
      * @param MediaServiceInterface $mediaService
-     * @param ProgressBar $progressBar
-     * @param OutputInterface $output
+     * @param ProgressBar           $progressBar
+     * @param OutputInterface       $output
+     *
      * @return void
      */
     private function optimizeFiles(
@@ -105,11 +126,11 @@ class BatchOptimizerCommand extends ShopwareCommand
                     null,
                     [
                         'User-Agent: Optimus-API',
-                        'Accept: image/*'
+                        'Accept: image/*',
                     ]
                 );
 
-                $this->imagesInHandle++;
+                ++$this->imagesInHandle;
 
                 if ($this->imagesInHandle === self::IMAGESPERHANDLE) {
                     $this->curlHandle->execute();
@@ -118,27 +139,6 @@ class BatchOptimizerCommand extends ShopwareCommand
                 }
             }
         }
-    }
-
-    /**
-     * @param $imageResult
-     * @param $url
-     * @param array $options
-     * @return void
-     */
-    public static function processCurlCallback($imageResult, $url, array $options)
-    {
-        $item = $options['user_data']['item'];
-        /** @var MediaServiceInterface $mediaService */
-        $mediaService = $options['user_data']['mediaService'];
-        /** @var ProgressBar $progressBar */
-        $progressBar = $options['user_data']['progressBar'];
-
-        if ($options['http_code'] === 200) {
-            $mediaService->write($item['path'], $imageResult);
-        }
-
-        $progressBar->advance();
     }
 
     /**

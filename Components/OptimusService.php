@@ -4,10 +4,22 @@ namespace FroshOptimusMediaOptimizer\Components;
 
 /**
  * Class OptimusService
- * @package FroshOptimusMediaOptimizer\Components
  */
 class OptimusService
 {
+    /**
+     * Optimize and compress your image but keep the metadata
+     *
+     * @var string
+     */
+    const OPTION_OPTIMIZE = 'optimize';
+
+    /**
+     * Optimize and convert your image to WebP
+     *
+     * @var string
+     */
+    const OPTION_WEBP = 'webp';
     /**
      * @var string
      */
@@ -17,18 +29,6 @@ class OptimusService
      * @var string
      */
     private $endpoint = 'https://api.optimus.io';
-
-    /**
-     * Optimize and compress your image but keep the metadata
-     * @var string
-     */
-    const OPTION_OPTIMIZE = 'optimize';
-
-    /**
-     * Optimize and convert your image to WebP
-     * @var string
-     */
-    const OPTION_WEBP = 'webp';
 
     /**
      * @param string $apiKey
@@ -48,28 +48,28 @@ class OptimusService
 
     /**
      * @param string $apiKey
+     *
      * @return $this
      */
     public function setApiKey($apiKey)
     {
-        $this->apiKey = (string)$apiKey;
+        $this->apiKey = (string) $apiKey;
+
         return $this;
     }
-
 
     /**
      * @return bool
      */
     public function verifyApiKey()
     {
-
         $ch = curl_init();
         // Set some options - we are passing in a useragent too here
-        curl_setopt_array($ch, array(
+        curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_URL => 'https://verify.optimus.io/'.$this->apiKey,
-            CURLOPT_USERAGENT => 'WordPress/4;http://www.google.de'
-        ));
+            CURLOPT_URL => 'https://verify.optimus.io/' . $this->apiKey,
+            CURLOPT_USERAGENT => 'WordPress/4;http://www.google.de',
+        ]);
         $response = curl_exec($ch);
         $curlError = curl_error($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -79,45 +79,45 @@ class OptimusService
             return false;
         }
 
-        if(strtotime('+1 years',$response) > time())  {
+        if (strtotime('+1 years', $response) > time()) {
             return true;
         }
 
         return false;
     }
 
-
     /**
      * @param string $image
      * @param string $option
      * @param string $target
-     * @return void
+     *
      * @throws OptimusApiException
+     *
+     * @return void
      */
     public function optimize($image, $option = self::OPTION_OPTIMIZE, $target = '')
     {
-
         $endpoint = $this->endpoint . '/' . $this->apiKey . '?' . $option;
 
-        $headers = array(
+        $headers = [
             'User-Agent: Optimus-API',
-            'Accept: image/*'
-        );
+            'Accept: image/*',
+        ];
 
         if ($target === '') {
             $target = $image;
         }
 
         $ch = curl_init();
-        curl_setopt_array($ch, array(
+        curl_setopt_array($ch, [
             CURLOPT_URL => $endpoint,
             CURLOPT_HTTPHEADER => $headers,
             CURLOPT_POSTFIELDS => file_get_contents($image),
             CURLOPT_BINARYTRANSFER => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_HEADER => true,
-            CURLOPT_SSL_VERIFYPEER => true
-        ));
+            CURLOPT_SSL_VERIFYPEER => true,
+        ]);
 
         $response = curl_exec($ch);
         $curlError = curl_error($ch);

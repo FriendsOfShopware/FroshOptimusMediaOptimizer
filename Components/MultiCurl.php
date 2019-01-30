@@ -5,55 +5,63 @@ namespace FroshOptimusMediaOptimizer\Components;
 /**
  * Class MultiCurl
  */
-Class MultiCurl
+class MultiCurl
 {
     /**
      * Current curl version
+     *
      * @var float
      */
     private $_curl_version;
 
     /**
      * max. number of simultaneous connections allowed
+     *
      * @var int
      */
     private $_maxConcurrent = 0;
 
     /**
      * shared cURL options
+     *
      * @var array
      */
     private $_options = [];
 
     /**
      * shared cURL request headers
+     *
      * @var array
      */
     private $_headers = [];
 
     /**
      * default callback
+     *
      * @var null
      */
     private $_callback = null;
 
     /**
      * all requests must be completed by this time
+     *
      * @var int
      */
     private $_timeout = 20000;
 
     /**
      * request_queue
+     *
      * @var array
      */
     private $requests = [];
 
     /**
      * MultiCurl constructor.
+     *
      * @param int $max_concurrent
      */
-    function __construct($max_concurrent = 10)
+    public function __construct($max_concurrent = 10)
     {
         @ini_set('max_execution_time', -1);
         @set_time_limit(0);
@@ -97,12 +105,13 @@ Class MultiCurl
     /**
      * Add a request to the request queue
      *
-     * @param string $url
-     * @param array|null $post_data
+     * @param string        $url
+     * @param array|null    $post_data
      * @param callable|null $callback
-     * @param array|null $user_data
-     * @param array|null $options
-     * @param array|null $headers
+     * @param array|null    $user_data
+     * @param array|null    $options
+     * @param array|null    $headers
+     *
      * @return int
      */
     public function addRequest(
@@ -112,15 +121,16 @@ Class MultiCurl
         $user_data = null,
         array $options = null,
         array $headers = null
-    ){
+    ) {
         $this->requests[] = [
             'url' => $url,
             'post_data' => ($post_data) ? $post_data : null,
             'callback' => ($callback) ? $callback : $this->_callback,
             'user_data' => ($user_data) ? $user_data : null,
             'options' => ($options) ? $options : null,
-            'headers' => ($headers) ? $headers : null
+            'headers' => ($headers) ? $headers : null,
         ];
+
         return count($this->requests) - 1;
     }
 
@@ -143,9 +153,9 @@ Class MultiCurl
 
         //start processing the initial request queue
         $num_initial_requests = min($this->_maxConcurrent, count($this->requests));
-        for ($i = 0; $i < $num_initial_requests; $i++) {
+        for ($i = 0; $i < $num_initial_requests; ++$i) {
             $this->initRequest($i, $multi_handle, $requests_map);
-            $num_outstanding++;
+            ++$num_outstanding;
         }
         do {
             do {
@@ -157,15 +167,15 @@ Class MultiCurl
             //a request is just completed, find out which one
             while ($completed = curl_multi_info_read($multi_handle)) {
                 $this->processRequest($completed, $multi_handle, $requests_map);
-                $num_outstanding--;
+                --$num_outstanding;
                 //try to add/start a new requests to the request queue
                 while (
                     $num_outstanding < $this->_maxConcurrent && //under the limit
                     $i < count($this->requests) && isset($this->requests[$i]) // requests left
                 ) {
                     $this->initRequest($i, $multi_handle, $requests_map);
-                    $num_outstanding++;
-                    $i++;
+                    ++$num_outstanding;
+                    ++$i;
                 }
             }
             usleep(15); //save CPU cycles, prevent continuous checking
@@ -176,6 +186,7 @@ Class MultiCurl
 
     /**
      * @param array $request
+     *
      * @return array|mixed
      */
     private function buildOptions(array $request)
@@ -222,14 +233,14 @@ Class MultiCurl
      */
     private function initRequest($request_num, $multi_handle, &$requests_map)
     {
-        $request =& $this->requests[$request_num];
+        $request =&$this->requests[$request_num];
         $this->addTimer($request);
         $ch = curl_init();
         $options = $this->buildOptions($request);
         $request['options_set'] = $options;
         curl_setopt_array($ch, $options);
         curl_multi_add_handle($multi_handle, $ch);
-        $ch_hash = (string)$ch;
+        $ch_hash = (string) $ch;
         $requests_map[$ch_hash] = $request_num;
     }
 
@@ -241,8 +252,8 @@ Class MultiCurl
     private function processRequest($completed, $multi_handle, array &$requests_map)
     {
         $ch = $completed['handle'];
-        $ch_hash = (string)$ch;
-        $request =& $this->requests[$requests_map[$ch_hash]];
+        $ch_hash = (string) $ch;
+        $request =&$this->requests[$requests_map[$ch_hash]];
         $request_info = curl_getinfo($ch);
         $request_info['curle'] = $completed['result'];
         $request_info['handle'] = $ch;
@@ -283,6 +294,7 @@ Class MultiCurl
 
     /**
      * @param array $request
+     *
      * @return mixed
      */
     private function stopTimer(array &$request)
@@ -290,6 +302,7 @@ Class MultiCurl
         $elapsed = $request['timer'] - microtime(true);
         $request['time'] = $elapsed;
         unset($request['timer']);
+
         return $elapsed;
     }
 }
