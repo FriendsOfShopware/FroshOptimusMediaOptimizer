@@ -34,6 +34,11 @@ class OptimusService
     private $endpoint = 'https://api.optimus.io';
 
     /**
+     * @var string
+     */
+    private $lastMsg;
+
+    /**
      * @param string $apiKey
      */
     public function __construct($apiKey)
@@ -61,6 +66,9 @@ class OptimusService
         return $this;
     }
 
+    public function getLastMessage() {
+        return $this->lastMsg;
+    }
 
     public function verifyApiKey() {
 
@@ -71,6 +79,7 @@ class OptimusService
         try {
             $this->optimize($image);
         } catch(OptimusApiException $exception) {
+            $this->lastMsg = $exception->getMessage();
             return false;
         }
 
