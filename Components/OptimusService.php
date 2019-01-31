@@ -108,8 +108,9 @@ class OptimusService
             CURLOPT_HEADER => true,
             CURLOPT_SSL_VERIFYPEER => true,
         ]);
+
         if (getenv('TRAVIS')) {
-            curl_setopt($ch,CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1_1);
+            curl_setopt($ch,CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1_2);
             curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
         }
 
