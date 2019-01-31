@@ -2,8 +2,6 @@
 
 namespace FroshOptimusMediaOptimizer\Components;
 
-use GuzzleHttp\ClientInterface;
-
 /**
  * Class OptimusService
  */
@@ -61,19 +59,26 @@ class OptimusService
         return $this;
     }
 
-    public function verifyApiKey() {
-
-        $file = tmpfile();
-        $image = stream_get_meta_data($file)['uri'];
-        file_put_contents($image, base64_decode('/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABoZGSccJz4lJT5CLy8vQkc9Ozs9R0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0f/2wBDARwnJzMmMz0mJj1HPTI9R0dHRERHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0dHR0f/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAT/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAv/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AKACF//Z'));
-
-        try {
-            $this->optimize($image);
-        } catch(OptimusApiException $exception) {
+    public function verifyApiKey()
+    {
+        $ch = curl_init();
+        // Set some options - we are passing in a useragent too here
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => 'https://verify.optimus.io/' . $this->apiKey,
+        ]);
+        $response = curl_exec($ch);
+        $curlError = curl_error($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        // error catching
+        if (!empty($curlError) || empty($response) || $httpcode != 200) {
             return false;
         }
+        if (strtotime('+1 years', $response) > time()) {
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     /**

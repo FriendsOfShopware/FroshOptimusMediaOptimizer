@@ -22,7 +22,7 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
         'path' => $this->getCacheDir(),
     ],
     'phpSettings' => [
-        'error_reporting' => E_ALL,
+        'error_reporting' => E_ERROR,
         'display_errors' => 1,
         'date.timezone' => 'Europe/Berlin',
         'max_execution_time' => 0,
