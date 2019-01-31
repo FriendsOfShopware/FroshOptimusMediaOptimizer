@@ -34,11 +34,6 @@ class OptimusService
     private $endpoint = 'https://api.optimus.io';
 
     /**
-     * @var string
-     */
-    private $lastMsg;
-
-    /**
      * @param string $apiKey
      */
     public function __construct($apiKey)
@@ -66,10 +61,6 @@ class OptimusService
         return $this;
     }
 
-    public function getLastMessage() {
-        return $this->lastMsg;
-    }
-
     public function verifyApiKey() {
 
         $file = tmpfile();
@@ -79,7 +70,6 @@ class OptimusService
         try {
             $this->optimize($image);
         } catch(OptimusApiException $exception) {
-            $this->lastMsg = $exception->getMessage();
             return false;
         }
 
@@ -118,6 +108,11 @@ class OptimusService
             CURLOPT_HEADER => true,
             CURLOPT_SSL_VERIFYPEER => true,
         ]);
+        if (getenv('TRAVIS')) {
+            curl_setopt($ch,CURLOPT_SSLVERSION,CURL_SSLVERSION_TLSv1_1);
+            curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,false);
+        }
+
 
         $response = curl_exec($ch);
         $curlError = curl_error($ch);
