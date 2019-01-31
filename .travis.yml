@@ -12,12 +12,14 @@ services:
 env:
   matrix:
     - SHOPWARE_VERSION="5.2"
-    allow_failures:
-      - php: nightly
   global:
   - PLUGIN_NAME=FroshOptimusMediaOptimizer
   - SHOPWARE_DIRECTORY="${HOME}/shopware"
   - PLUGIN_DIRECTORY="${SHOPWARE_DIRECTORY}/custom/plugins"
+
+matrix:
+  allow_failures:
+    - php: nightly
 
 cache:
   directories:
