@@ -34,18 +34,11 @@ class OptimusService
     private $endpoint = 'https://api.optimus.io';
 
     /**
-     * @var ClientInterface
-     */
-    private $guzzleClient;
-
-    /**
      * @param string $apiKey
-     * @param ClientInterface $guzzleClient
      */
-    public function __construct($apiKey, ClientInterface $guzzleClient)
+    public function __construct($apiKey)
     {
         $this->apiKey = $apiKey;
-        $this->guzzleClient = $guzzleClient;
     }
 
     /**
