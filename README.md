@@ -5,6 +5,11 @@ optimizing thumbnails with [optimus.io](https://optimus.io/)
 
 Converts JPG-Images for best score in google-insights.
 
+## Features
+
+- automatic optimizing images on upload, incl. thumbnails and original, if activated in setting
+- webp-encoder for [FroshWebp](https://github.com/FriendsOfShopware/FroshWebP)
+
 ## Zip-Installation
 
 * Download the [latest plugin version](https://github.com/FriendsOfShopware/FroshOptimusMediaOptimizer/releases/latest/)
